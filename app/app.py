@@ -65,5 +65,18 @@ def dashboard():
 with app.app_context():
     db.create_all()
 
+@app.route("/admin")
+
+def admin():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
+    user=User.query.get(session["user_id"])
+
+    if user.role!='admin':
+        return "Access denied!! , 403"
+
+    return "Welcom to Admin Panel"
+
 if __name__=="__main__":
     app.run(debug=True)
