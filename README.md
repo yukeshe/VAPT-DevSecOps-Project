@@ -7,8 +7,10 @@ v1 (completed)
 
 v2 (in-Progress)
   
-   Client → API Gateway → Flask App → Database
-		             ↓
+					  ↓
+  Client → API Gateway → Flask App → Database
+		              
+					  ↓
               WAF / Rate Limiter
                       ↓
              SIEM Logging & Alerts
