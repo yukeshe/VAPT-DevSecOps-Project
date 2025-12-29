@@ -84,6 +84,9 @@ def profile(user_id):
 
     if "user_id" not in session:
         return redirect(url_for("login"))
+
+    if session['user_id'] != user_id:
+        return 'Access Denied 403'
     
     user=User.query.get(user_id)
 
