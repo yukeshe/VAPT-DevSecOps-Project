@@ -9,10 +9,10 @@ v2 (in-Progress)
   
 					  
   Client → API Gateway → Flask App → Database
-					  ↓
+					  ##
               WAF / Rate Limiter
-                      ↓
+                      ##
              SIEM Logging & Alerts
-                      ↓
+                      ##
         Automated VAPT + Security Pipeline
 
