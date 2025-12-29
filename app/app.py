@@ -78,5 +78,16 @@ def admin():
 
     return "Welcom to Admin Panel"
 
+@app.route("/profile/<int:user_id>")
+
+def profile(user_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
+    user=User.query.get(user_id)
+
+    return f"Profile Page <br> Username: {user.username} <br> Email: {user.email}"
+
 if __name__=="__main__":
     app.run(debug=True)
