@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="p-8">
+  <h1 class="text-3xl font-bold mb-6">Security Logs</h1>
+
+  <div class="bg-gray-800 p-6 rounded-xl space-y-3">
+
+    <p class="text-red-400">[ALERT] Failed login attempt detected</p>
+    <p class="text-yellow-400">[WARNING] Suspicious activity from IP 127.0.0.1</p>
+    <p class="text-green-400">[INFO] User logged in successfully</p>
+
+  </div>
+</div>
+
+{% endblock %}

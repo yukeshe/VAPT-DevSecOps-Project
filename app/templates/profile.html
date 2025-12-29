@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="p-8 max-w-xl mx-auto">
+  <div class="bg-gray-800 p-8 rounded-xl shadow">
+    <h2 class="text-2xl font-bold mb-4">My Profile</h2>
+
+    <p><span class="text-gray-400">Username:</span> {{ user.username }}</p>
+    <p><span class="text-gray-400">Email:</span> {{ user.email }}</p>
+    <p><span class="text-gray-400">Role:</span> {{ user.role }}</p>
+  </div>
+</div>
+
+{% endblock %}

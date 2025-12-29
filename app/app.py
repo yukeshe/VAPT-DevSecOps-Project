@@ -60,7 +60,9 @@ def login():
 def dashboard():
     if "user_id" not in session:
         return redirect(url_for("login"))
-    return "Welcome to your dashboard"
+    
+    user=User.query.get(session["user_id"])
+    return render_template("dashboard.html",user=user)
 
 with app.app_context():
     db.create_all()
@@ -78,19 +80,24 @@ def admin():
 
     return "Welcom to Admin Panel"
 
-@app.route("/profile/<int:user_id>")
+@app.route("/profile")
 
-def profile(user_id):
+def profile():
 
     if "user_id" not in session:
         return redirect(url_for("login"))
-
-    if session['user_id'] != user_id:
-        return 'Access Denied 403'
     
-    user=User.query.get(user_id)
+    user=User.query.get(session["user_id"])
 
-    return f"Profile Page <br> Username: {user.username} <br> Email: {user.email}"
+    return render_template("profile.html",user=user)
+
+@app.route("/logs")
+
+def logs():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    return render_template("logs.html")
 
 if __name__=="__main__":
     app.run(debug=True)

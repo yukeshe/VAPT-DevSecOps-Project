@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="p-8">
+  <h1 class="text-3xl font-bold mb-6">Security Dashboard</h1>
+
+  <div class="grid grid-cols-3 gap-6">
+
+    <div class="bg-gray-800 p-6 rounded-xl shadow">
+      <h3 class="text-lg font-semibold">User</h3>
+      <p>{{ user.username }}</p>
+      <p class="text-sm text-gray-400">{{ user.role }}</p>
+    </div>
+
+    <div class="bg-gray-800 p-6 rounded-xl shadow">
+      <h3 class="text-lg font-semibold">System Status</h3>
+      <p class="text-green-400">All Systems Secure</p>
+    </div>
+
+    <div class="bg-gray-800 p-6 rounded-xl shadow">
+      <h3 class="text-lg font-semibold">Threat Level</h3>
+      <p class="text-yellow-400">Moderate</p>
+    </div>
+
+  </div>
+
+  {% if user.role == "admin" %}
+  <div class="mt-8 bg-red-900/50 p-6 rounded-xl">
+    <h2 class="text-xl font-bold text-red-400">Admin Controls</h2>
+    <p class="text-sm mt-2">Sensitive operations available.</p>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}
