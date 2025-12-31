@@ -1,10 +1,12 @@
 from flask import Flask,render_template,request,session,redirect,url_for
 from models import db,User
 from werkzeug.security import generate_password_hash,check_password_hash
-
+from flask_jwt_extended import jwt_required,JWTManager,get_jwt_identity,create_access_token
 
 app=Flask(__name__)
 app.secret_key="dev-secret"
+app.config["JWT_SECRET_KEY"]="super-secret-key" 
+jwt=JWTManager(app)
 
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///vapt.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
@@ -98,6 +100,27 @@ def logs():
         return redirect(url_for("login"))
 
     return render_template("logs.html")
+
+@app.route("/api/login",methods=["POST"])
+
+def api_login():
+    data=request.get_json()
+    user=User.query.filter_by(username=data["username"]).first()
+
+    if user and check_password_hash(user.password,data["password"]):
+        token = create_access_token(identity=str(user.id))
+        return{"access_token":token}
+
+    return {'msg':'Bad credentials'},401
+
+@app.route("/api/profile")
+@jwt_required()
+
+def api_profile():
+    user_id=int(get_jwt_identity())
+    user=User.query.get(user_id)
+
+    return {'username':user.username,'email':user.email,'role':user.role}
 
 if __name__=="__main__":
     app.run(debug=True)
