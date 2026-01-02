@@ -1,12 +1,15 @@
 from flask import Flask,render_template,request,session,redirect,url_for
 from models import db,User
 from werkzeug.security import generate_password_hash,check_password_hash
-from flask_jwt_extended import jwt_required,JWTManager,get_jwt_identity,create_access_token
+from flask_jwt_extended import jwt_required,JWTManager,get_jwt_identity,create_access_token,create_refresh_token
+from datetime import timedelta
 
 app=Flask(__name__)
 app.secret_key="dev-secret"
 app.config["JWT_SECRET_KEY"]="super-secret-key" 
 jwt=JWTManager(app)
+
+app.config["JWT_ACCESS_TOKEN_EXPIRES"]=timedelta(minutes=15)
 
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///vapt.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
@@ -108,8 +111,9 @@ def api_login():
     user=User.query.filter_by(username=data["username"]).first()
 
     if user and check_password_hash(user.password,data["password"]):
-        token = create_access_token(identity=str(user.id))
-        return{"access_token":token}
+        access = create_access_token(identity=str(user.id))
+        refresh = create_refresh_token(identity=str(user.id))
+        return{"access_token":access,"refresh_token":refresh}
 
     return {'msg':'Bad credentials'},401
 
@@ -121,6 +125,27 @@ def api_profile():
     user=User.query.get(user_id)
 
     return {'username':user.username,'email':user.email,'role':user.role}
+
+
+@app.route("/app/refresh",methods=['POST'])
+@jwt_required(refresh=True)
+
+def refresh():
+    uid=get_jwt_identity()
+    new_access=create_access_token(identity=uid)
+    return{"access_token":new_access}
+
+@app.route("/api/admin",methods=["POST"])
+@jwt_required()
+
+def api_admin():
+    uid=get_jwt_identity()
+    user=User.query.get(uid)
+
+    if user.role!="admin":
+        return{"msg":"Forbidden"},403   
+    
+    return {"msg":"Admin data"}
 
 if __name__=="__main__":
     app.run(debug=True)

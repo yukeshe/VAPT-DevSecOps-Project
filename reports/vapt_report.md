@@ -34,4 +34,3 @@ Remediation: Object-level authorization enforcement.
 Conclusion:
 Implementing secure authentication, authorization, and access control significantly reduced the attack surface and improved overall security posture.
 
-
