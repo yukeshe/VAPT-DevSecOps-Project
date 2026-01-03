@@ -1,5 +1,5 @@
 from flask import Flask,render_template,request,session,redirect,url_for
-from models import db,User
+from models import db,User,Securitylog
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_jwt_extended import jwt_required,JWTManager,get_jwt_identity,create_access_token,create_refresh_token
 from datetime import timedelta
@@ -102,7 +102,14 @@ def logs():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    return render_template("logs.html")
+    user=User.query.get(session["user_id"])
+
+    if user.role!='admin':
+        return 'Access denied',403
+
+    records=Securitylog.query.order_by(Securitylog.timestamp.desc()).limit(50).all()
+
+    return render_template("logs.html",records=records)
 
 @app.route("/api/login",methods=["POST"])
 
@@ -113,8 +120,10 @@ def api_login():
     if user and check_password_hash(user.password,data["password"]):
         access = create_access_token(identity=str(user.id))
         refresh = create_refresh_token(identity=str(user.id))
+        log_event("SUCCESSFUL_LOGIN",user.id)
         return{"access_token":access,"refresh_token":refresh}
 
+    log_event("FAILED_LOGIN")
     return {'msg':'Bad credentials'},401
 
 @app.route("/api/profile")
@@ -133,6 +142,7 @@ def api_profile():
 def refresh():
     uid=get_jwt_identity()
     new_access=create_access_token(identity=uid)
+    log_event("TOKEN_REFRESH",uid)
     return{"access_token":new_access}
 
 @app.route("/api/admin",methods=["POST"])
@@ -143,9 +153,16 @@ def api_admin():
     user=User.query.get(uid)
 
     if user.role!="admin":
+        log_event("FORBIDDEN_ADMIN_ACCESS",uid)
         return{"msg":"Forbidden"},403   
     
     return {"msg":"Admin data"}
+
+def log_event(event,user_id=None):
+    ip=request.remote_addr
+    sec_log=Securitylog(event_type=event,user_id=user_id,ip_address=ip)
+    db.session.add(sec_log)
+    db.session.commit()
 
 if __name__=="__main__":
     app.run(debug=True)

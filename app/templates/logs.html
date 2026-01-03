@@ -2,13 +2,18 @@
 {% block content %}
 
 <div class="p-8">
-  <h1 class="text-3xl font-bold mb-6">Security Logs</h1>
+  <h1 class="text-3xl font-bold mb-6">Security Operations Center</h1>
 
-  <div class="bg-gray-800 p-6 rounded-xl space-y-3">
+  <div class="bg-gray-800 p-6 rounded-xl shadow space-y-3">
 
-    <p class="text-red-400">[ALERT] Failed login attempt detected</p>
-    <p class="text-yellow-400">[WARNING] Suspicious activity from IP 127.0.0.1</p>
-    <p class="text-green-400">[INFO] User logged in successfully</p>
+    {% for log in records %}
+      <div class="flex justify-between border-b border-gray-700 pb-2">
+        <span>{{ log.timestamp }}</span>
+        <span class="text-yellow-400">{{ log.event_type }}</span>
+        <span>{{ log.ip_address }}</span>
+        <span>User ID: {{ log.user_id }}</span>
+      </div>
+    {% endfor %}
 
   </div>
 </div>

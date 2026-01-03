@@ -15,4 +15,4 @@ class Securitylog(db.Model):
     event_type=db.Column(db.String(100))
     user_id=db.Column(db.Integer)
     ip_address=db.Column(db.String(50))
-    timestamp=db.Column(db.DateTime, default=datetime)
+    timestamp=db.Column(db.DateTime, default=datetime.utcnow)
