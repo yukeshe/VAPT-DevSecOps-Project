@@ -36,7 +36,11 @@ Containerized \& Hardened Deployment
 
 Key Features:
 
+
+
 Vulnerability Assessment \& Penetration Testing
+
+
 •	Broken authentication \& remediation
 •	Privilege escalation testing
 •	IDOR exploitation \& prevention
@@ -44,7 +48,11 @@ Vulnerability Assessment \& Penetration Testing
 •	JWT attack simulation
 •	Container vulnerability scanning
 
+
+
 Secure Engineering
+
+
 •	Password hashing \& secure login
 •	JWT expiration \& refresh tokens
 •	Role-based access control
@@ -52,27 +60,43 @@ Secure Engineering
 •	Brute-force protection
 •	Security event logging
 
+
+
 Detection \& SIEM
+
+
 •	Centralized security logs
 •	Failed login detection
 •	Privilege abuse alerts
 •	Token misuse tracking
 •	Admin-only SOC dashboard
 
+
+
 DevSecOps \& Automation
+
+
 •	CI/CD pipeline with OWASP ZAP
 •	Automated security scans
 •	Container vulnerability scanning
 •	Secure Docker image hardening
 
+
+
 Cloud \& Container Security
+
+
 •	Dockerized deployment
 •	Non-root containers
 •	Capability restriction
 •	Network isolation
 •	Zero Trust security model
 
+
+
 Tech Stack
+
+
 •	Backend: Flask, SQLAlchemy
 •	Frontend: HTML, TailwindCSS
 •	Security: JWT, Werkzeug, OWASP ZAP
@@ -82,7 +106,9 @@ Tech Stack
 
 
 
-How to Run
+How to Run:
+
+
 docker build -t security-platform .
 docker run -d --name secure-app --cap-drop ALL --security-opt no-new-privileges -p 5000:5000 security-platform
 
